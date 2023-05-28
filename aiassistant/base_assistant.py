@@ -4,6 +4,8 @@
 # 
 
 import openai
+from openai.error import InvalidRequestError, RateLimitError
+import time
 import os
 
 from aiassistant.exceptions import APIKEYNotFoundError
@@ -59,26 +61,44 @@ class BaseAssistant:
         '''
         openai.api_key = self.api_key
 
-        messages = []
+        history_length = history_length or len(self.history)
+        is_asking = True
 
-        if self.gpt_system:
-            messages.append(self.api_format('system', self.gpt_system))
-        
-        
-        if use_history:
-            if history_length and len(self.history) > history_length:
-                messages += self.history[-1*history_length:].copy()
-            else:
-                messages += self.history.copy()
+        while(is_asking):
 
-        new_message = self.api_format('user', message)
-        messages.append(new_message)
+            messages = []
 
-        response = openai.ChatCompletion.create(
-            model=self.model,
-            messages=messages,
-            temperature=self.temperature,
-        )
+            if self.gpt_system:
+                messages.append(self.api_format('system', self.gpt_system))
+            
+            
+            if use_history:
+                if len(self.history) > history_length:
+                    messages += self.history[-1*history_length:].copy()
+                else:
+                    messages += self.history.copy()
+
+            new_message = self.api_format('user', message)
+            messages.append(new_message)
+
+            try:
+                response = openai.ChatCompletion.create(
+                    model=self.model,
+                    messages=messages,
+                    temperature=self.temperature,
+                )
+                is_asking = False
+            
+            except InvalidRequestError as e:
+                if 'reduce the length of the messages' in e._message:
+                    history_length -= 2
+                    time.sleep(1)
+                    continue
+                else:
+                    raise Exception(e._message)
+            
+            except RateLimitError as e:
+                raise Exception('一時的なサーバーエラーです。再度実行してください。\n何度も発生する場合は、APIの使用上限に達している可能性があります。')
 
         res = response['choices'][0]['message']['content']
         answer = self.api_format('assistant', res)

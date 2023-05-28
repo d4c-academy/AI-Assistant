@@ -19,7 +19,7 @@ class AnalysisAssistant(BaseAssistant):
         super().__init__(api_key, model, temperature)
         self.gpt_system = 'Pythonを使って実装する'
 
-    def get_dataframes(self) -> list[dict]:
+    def get_dataframes(self) -> list:
         '''
         main関数（notebookの想定）のdataframeとそのカラムをすべて取得する
         '''
@@ -89,5 +89,14 @@ class AnalysisAssistant(BaseAssistant):
         else:
             print('返事がPythonのコードではありませんでした')
 
-    def ask_error(self) -> None:
-        pass
+    def ask_error(self, message: str) -> None:
+        '''
+        エラー文をChatGPTに聞く
+        なお、履歴（history）には残さない
+        '''
+        
+        message = '下記エラーの内容と解決方法を教えてください。\n' + message
+
+        new_message, answer = self.ask_ChatGPT(message=message,use_history=False)
+
+        print(answer['content'])
