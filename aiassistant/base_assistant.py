@@ -6,7 +6,7 @@
 import openai
 import os
 
-from gptassistant.exceptions import APIKEYNotFoundError
+from aiassistant.exceptions import APIKEYNotFoundError
 
 class BaseAssistant:
     '''

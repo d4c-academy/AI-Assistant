@@ -2,7 +2,7 @@
 # シンプルにchatGPTと会話するためのクラス
 # 
 
-from gptassistant.base_assistant import BaseAssistant
+from aiassistant.base_assistant import BaseAssistant
 
 class ChatAssistant(BaseAssistant):
 

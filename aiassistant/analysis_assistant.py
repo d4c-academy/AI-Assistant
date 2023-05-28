@@ -5,7 +5,7 @@
 import sys
 import pandas as pd
 
-from gptassistant.base_assistant import BaseAssistant
+from aiassistant.base_assistant import BaseAssistant
 
 class AnalysisAssistant(BaseAssistant):
 
