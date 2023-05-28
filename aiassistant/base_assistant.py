@@ -44,7 +44,7 @@ class BaseAssistant:
     def api_format(self, role: str, content: str) -> dict:
         return {'role': role, 'content': content}
 
-    def ask_gpt(self, message: str, use_history: bool=True, history_length: int=None) -> tuple:
+    def ask_ChatGPT(self, message: str, use_history: bool=True, history_length: int=None) -> tuple:
         '''
         messageに送信内容を渡すと
         送信内容、返信内容をapiのフォーマットにして返す

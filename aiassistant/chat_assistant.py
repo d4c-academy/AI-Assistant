@@ -20,7 +20,7 @@ class ChatAssistant(BaseAssistant):
         self.gpt_system = gpt_system
 
     def ask(self, message: str) -> str:
-        new_message, answer = self.ask_gpt(message)
+        new_message, answer = self.ask_ChatGPT(message)
 
         self.add_history(new_message, answer)
         

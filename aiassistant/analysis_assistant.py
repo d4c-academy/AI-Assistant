@@ -67,6 +67,12 @@ class AnalysisAssistant(BaseAssistant):
         return code
     
     def ask(self, message: str) -> None:
+        '''
+        ChatGPTに聞くためのメソッド
+        message引数に質問内容を渡す
+        なお、Jupyter Notebook上での使用が前提
+        '''
+
         dataframes = self.get_dataframes()
         if dataframes:
             message += '\n読み込んだデータフレーム名とそのカラムは以下です。\n'
@@ -74,7 +80,7 @@ class AnalysisAssistant(BaseAssistant):
                 message += dataframe['name'] + '\n'
                 message += dataframe['columns'] + '\n'
         
-        new_message, answer = self.ask_gpt(message)
+        new_message, answer = self.ask_ChatGPT(message)
 
         if self.is_python_code(answer['content']):
             self.add_history(new_message, answer)
@@ -82,3 +88,6 @@ class AnalysisAssistant(BaseAssistant):
             print(self.extract_python_code(answer['content']))
         else:
             print('返事がPythonのコードではありませんでした')
+
+    def ask_error(self) -> None:
+        pass
