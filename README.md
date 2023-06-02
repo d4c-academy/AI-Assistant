@@ -1,1 +1,1 @@
-# GPT-Assistant
+# AI-Assistant
