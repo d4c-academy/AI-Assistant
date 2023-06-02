@@ -5,7 +5,7 @@
 import sys
 import pandas as pd
 
-from gptassistant.base_assistant import BaseAssistant
+from aiassistant.base_assistant import BaseAssistant
 
 class AnalysisAssistant(BaseAssistant):
 
@@ -19,7 +19,7 @@ class AnalysisAssistant(BaseAssistant):
         super().__init__(api_key, model, temperature)
         self.gpt_system = 'Pythonを使って実装する'
 
-    def get_dataframes(self) -> list[dict]:
+    def get_dataframes(self) -> list:
         '''
         main関数（notebookの想定）のdataframeとそのカラムをすべて取得する
         '''
@@ -67,6 +67,12 @@ class AnalysisAssistant(BaseAssistant):
         return code
     
     def ask(self, message: str) -> None:
+        '''
+        ChatGPTに聞くためのメソッド
+        message引数に質問内容を渡す
+        なお、Jupyter Notebook上での使用が前提
+        '''
+
         dataframes = self.get_dataframes()
         if dataframes:
             message += '\n読み込んだデータフレーム名とそのカラムは以下です。\n'
@@ -74,7 +80,7 @@ class AnalysisAssistant(BaseAssistant):
                 message += dataframe['name'] + '\n'
                 message += dataframe['columns'] + '\n'
         
-        new_message, answer = self.ask_gpt(message)
+        new_message, answer = self.ask_ChatGPT(message)
 
         if self.is_python_code(answer['content']):
             self.add_history(new_message, answer)
@@ -82,3 +88,15 @@ class AnalysisAssistant(BaseAssistant):
             print(self.extract_python_code(answer['content']))
         else:
             print('返事がPythonのコードではありませんでした')
+
+    def ask_error(self, message: str) -> None:
+        '''
+        エラー文をChatGPTに聞く
+        なお、履歴（history）には残さない
+        '''
+        
+        message = '下記エラーの内容と解決方法を教えてください。\n' + message
+
+        new_message, answer = self.ask_ChatGPT(message=message,use_history=False)
+
+        print(answer['content'])

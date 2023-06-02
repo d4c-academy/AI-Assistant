@@ -2,7 +2,7 @@
 # シンプルにchatGPTと会話するためのクラス
 # 
 
-from gptassistant.base_assistant import BaseAssistant
+from aiassistant.base_assistant import BaseAssistant
 
 class ChatAssistant(BaseAssistant):
 
@@ -20,7 +20,7 @@ class ChatAssistant(BaseAssistant):
         self.gpt_system = gpt_system
 
     def ask(self, message: str) -> str:
-        new_message, answer = self.ask_gpt(message)
+        new_message, answer = self.ask_ChatGPT(message)
 
         self.add_history(new_message, answer)
         
