@@ -1,6 +1,7 @@
 # AI-Assistant
 ## aiassistantって？
-aiassistantは、Jupyter Notebookや、Google Colaboratoryで動く、コード生成支援ツールです。
+aiassistantは、Jupyter Notebookや、Google Colaboratoryで動く、コード生成支援ツールです。<br>
+askメソッドに生成したいコードの内容を渡すことで、ChatGPTがコードをPythonのコードを生成してくれます。みなさんのデータ分析を支援するツールです。
 
 ## インストール前の準備
 このツールを使用するには、OpenAIのAPIキーが必要になります。下記URLからキーの発行を行い、使用してください。
